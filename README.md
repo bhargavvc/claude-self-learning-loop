@@ -152,7 +152,7 @@ And this is what the next session starts with:
 | A failing background run could respawn on every session start. | The wake-up stamp is written *before* the spawn. |
 | On Windows, a detached child got no console, and the background run (PowerShell, in my case) exited 0 having done nothing. Its output was discarded, so nobody noticed for weeks. | Don't detach on Windows; `unref()` is enough to outlive the hook. Send stderr to a log, never to nowhere. |
 | The background run starts at the same moment your new session refreshes its login token, and one of them loses. | Retry once after 75 seconds on that specific error. |
-| The Teacher's own headless sessions got captured, and showed up in the session list. | It sets `CLAUDE_TEACHER_ACTIVE=1`, which every hook checks, and runs with `--no-session-persistence`. |
+| The Teacher's own headless sessions got captured, and showed up in the session list. | It sets `CLAUDE_TEACHER_ACTIVE=1`, which both hooks check, and runs with `--no-session-persistence`. |
 | Several patterns turning active at once made one Evaluator call too expensive. | Judge each pattern once, at most 2 per run. |
 
 ## Install
@@ -236,16 +236,16 @@ Secrets and email addresses are scrubbed again before anything enters the ledger
 
 ## Files
 
-| File | Lines | What it does |
-|---|---|---|
-| `hooks/capture.js` | 71 | SessionEnd: transcript in, one entry of names and counts out |
-| `hooks/inject.js` | 43 | SessionStart: inject approved patterns; wake the Teacher once a day |
-| `teacher/teacher.js` | 225 | The Teacher CLI: `run`, `list`, `approve`, `hold`, `add`, `rate` |
-| `teacher/ledger.js` | 139 | Pure bookkeeping: confidence, lifecycle, scrubbing, merge, verdicts, selection |
-| `teacher/teacher-prompt.md` | 38 | What to mine, and what never to |
-| `teacher/evaluator-prompt.md` | 26 | The four tests |
-| `commands/*.md` | 26 | `/good`, `/bad`, `/patterns` |
-| `test.js` | 161 | 10 checks of the whole loop, with no API calls |
+| File | What it does |
+|---|---|
+| `hooks/capture.js` | SessionEnd: transcript in, one entry of names and counts out |
+| `hooks/inject.js` | SessionStart: inject approved patterns; wake the Teacher once a day |
+| `teacher/teacher.js` | The Teacher CLI: `run`, `list`, `approve`, `hold`, `add`, `rate` |
+| `teacher/ledger.js` | Pure bookkeeping: confidence, lifecycle, scrubbing, merge, verdicts, selection |
+| `teacher/teacher-prompt.md` | What to mine, and what never to |
+| `teacher/evaluator-prompt.md` | The four tests |
+| `commands/*.md` | `/good`, `/bad`, `/patterns` |
+| `test.js` | 10 checks of the whole loop, with no API calls |
 
 ## Limitations
 

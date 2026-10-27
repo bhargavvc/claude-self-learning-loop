@@ -172,7 +172,7 @@ function setApproval(args, isApproved) {
   const ledger = L.loadLedger();
   const rows = numberedActive(ledger);
   const picked = args[0] === 'recommended'
-    ? rows.filter(p => p.recommend === true)
+    ? rows.filter(p => p.recommend === true && p.approved === undefined)
     : args.map(n => rows[Number(n) - 1]).filter(Boolean);
   for (const p of picked) p.approved = isApproved;
   L.saveLedger(ledger);

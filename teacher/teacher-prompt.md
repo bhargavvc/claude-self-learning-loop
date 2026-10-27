@@ -10,8 +10,9 @@ INPUT (everything after ===DATA===, oldest first):
   (a file edited 3+ times, so the session struggled with it). Many corrections or rework
   with few approvals means the approach was wrong: mine what to AVOID. Approvals mean
   keep doing it. These counts are weak, derived signals.
-- Rating entries ("## <time> — GOOD" or "— BAD", with an optional note): the user's own
-  verdict on the session just before it. The strongest signal.
+- Rating entries ("## <time> — GOOD" or "— BAD", with an optional note): written while the
+  session that earned it is still running, so it sits next to that session's own entry
+  (same cwd, closest time) — not the entry before it. The strongest signal.
 - EXISTING PATTERNS (listed just above ===DATA===, if any): patterns already in the ledger.
 
 MINE FOR generalisable ways of working:
