@@ -15,30 +15,27 @@ flowchart TD
     subgraph DAY["During the day: every Claude Code session"]
         S["Claude Code session<br/>(any project)"]
         CAP["hooks/capture.js<br/>SessionEnd · no LLM"]
-        SL[("data/session-log.md<br/>tool names · file names · counts<br/>never your words")]
+        SL[("data/session-log.md<br/>names and counts<br/>never your words")]
         RATE["/good · /bad<br/>you rate the session"]
         FL[("data/feedback-log.md")]
         S -->|session ends| CAP --> SL
         S -.->|you type| RATE --> FL
     end
 
-    subgraph DAILY["Once a day: the Teacher (teacher.js run)"]
-        G["gather<br/>only entries newer than the watermark"]
+    subgraph DAILY["Once a day: the Teacher"]
+        G["gather<br/>entries newer than<br/>the watermark"]
         MINE["Miner<br/>claude -p, no tools<br/>returns JSON patterns"]
-        MERGE["merge · no LLM<br/>counts · confidence · lifecycle<br/>secret scrub"]
+        MERGE["merge · no LLM<br/>counts · confidence<br/>lifecycle · secret scrub"]
         LED[("data/patterns.json<br/>the ledger")]
-        EVAL["Evaluator<br/>claude -p, no tools<br/>causal? safe? actionable? scope?"]
-        G --> MINE --> MERGE --> LED
-        LED -->|newly active| EVAL -->|verdict + scope| LED
+        EVAL["Evaluator<br/>claude -p, no tools<br/>causal? safe? scoped?"]
+        G --> MINE --> MERGE --> LED -->|newly active| EVAL
     end
 
     SL --> G
     FL --> G
-    YOU["you approve<br/>/patterns"] --> LED
-    INJ["hooks/inject.js<br/>SessionStart · no LLM<br/>approved · active · in scope · max 20"]
-    LED --> INJ
+    EVAL -->|verdict| YOU["you approve<br/>/patterns"]
+    YOU --> INJ["hooks/inject.js<br/>SessionStart · no LLM<br/>approved · active<br/>in scope · max 20"]
     INJ -.->|next session starts with them| S
-    INJ -.->|wakes it once a day| G
 
     classDef det fill:#e3f2fd,stroke:#1565c0,color:#0d47a1
     classDef llm fill:#fff3e0,stroke:#e65100,color:#bf360c
